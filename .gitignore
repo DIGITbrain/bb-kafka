@@ -1,0 +1,5 @@
+docker/zookeeper-1-logs
+docker/kafka-1-logs
+docker/kafka-2-logs
+docker/kafka-3-logs
+
