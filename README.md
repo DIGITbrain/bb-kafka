@@ -23,7 +23,14 @@ Apache Kafka is an open-source distributed event streaming platform.
 
 # Deployment
 
-General example:
+General example (1 broker, 1 zookeeper, see: [docker-compose/single-node-kafka-docker-compose.yml](docker-compose/single-node-kafka-docker-compose.yml)):
+
+```
+cd docker-compose
+docker-compose -f ./single-node-kafka-docker-compose.yml build
+docker-compose -f ./single-node-kafka-docker-compose.yml up -d
+```
+
 
 
 
