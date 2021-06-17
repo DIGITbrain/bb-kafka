@@ -6,7 +6,7 @@ Docker-comopose
 
 Based on Wurstmeister [1], but Zookeeper replaced by the one shipped with Kafka.
 
-__Note:__ image build is required, see: [docker/build.sh](../docker/build.sh)
+__Note:__ image build is required, see: [docker/build.sh](tree/master/docker/build.sh/build.sh)
 
 ## Licence
 
