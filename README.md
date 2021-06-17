@@ -73,6 +73,21 @@ docker-compose -f ./five-node-kafka-docker-compose.yml up -d
 
 For configuration details see: [8].
 
+## Test
+
+CREATE TOPIC:
+   > docker exec <kafka-container-id> kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 2 --topic test2
+   docker exec <kafka-container-id> kafka-topics.sh --list --zookeeper zookeeper:2181
+
+EXTERNAL network:
+   > $KAFKA_HOME/bin/kafka-console-producer.sh --broker-list <public_ip>:9092 --topic test
+   $KAFKA_HOME/bin/kafka-console-consumer.sh --bootstrap-server <public_ip>:9092 --topic test --from-beginning
+
+INTERNAL network:
+   > docker exec -it <kafka-container-id> kafka-console-producer.sh --broker-list localhost:39092 --topic test
+   docker exec <kafka-container-id> kafka-console-consumer.sh --bootstrap-server localhost:39092 --topic test --from-beginning
+
+
 # References
 
 [1] https://github.com/wurstmeister/kafka-docker.git
