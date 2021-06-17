@@ -1,23 +1,10 @@
-# IMAGE SOURCE
-
-Docker-compose kafka clusters. Based on Wurstmeister but Zookeeper replaced by the one shipped with Kafka.s
-
-__Note:__ image build required. See: [../kafka-docker-image/build.sh](../kafka-docker-image/build.sh)
-
-# Licence
-
-Apache License 2.0
-
-# Version
-2.7.0
-
 # Configurations
 
-- Single-node: 1 Kafka + 1 Zookeeper
-- Multi-node: 5 Kafka + 1 Zookeeper
+- Single-node: 1 Kafka broker + 1 Zookeeper: single-node-kafka-docker-compose.yml
+- Multi-node: 5 Kafka broker + 1 Zookeeper: five-node-kafka-docker-compose.yml
 
 
-## TEST
+## Test
 
 CREATE TOPIC:
    > docker exec <kafka-container-id> kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 2 --topic test2
@@ -35,7 +22,7 @@ INTERNAL network:
 See also: https://rmoff.net/2018/08/02/kafka-listeners-explained/
 
 
-# TLS/SSL
+# TLS (under development)
 
 Certificates must be put into JKS (Java Keystores). PKCS12 format is supported (as of Java9).
 
@@ -51,9 +38,6 @@ __Notes__:
   - -ext option can be ommited.
   - disable hostname verification: set ssl.endpoint.identification.algorithm to an empty string
 
-
-
-
 server.properties
 
 listeners=PLAINTEXT://:9092,SSL://:9093
@@ -67,7 +51,7 @@ ssl.client.auth=required
 
 
 
-## TEST
+## Test
 
 
 keytool -keystore client.keystore.jks -alias localhost -validity 365 -genkey -keyalg RSA -ext SAN=DNS:fqdn_of_client_system
