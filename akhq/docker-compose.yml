@@ -1,0 +1,26 @@
+version: '3.6'
+
+services:
+  akhq:
+    # build:
+    #   context: .
+    image: tchiotludo/akhq
+    environment:
+      AKHQ_CONFIGURATION: |
+        micronaut:
+          security:
+            enabled: true
+        akhq:
+          connections:
+            docker-kafka-server:
+              properties:
+                bootstrap.servers: "xxx.xxx.xxx.xxx:9092"
+          security:
+            default-group: topic-reader
+            basic-auth:
+              - username: admin
+                password: sha256hashedPasss
+                groups:
+                  - admin
+    ports:
+      - 8080:8080
