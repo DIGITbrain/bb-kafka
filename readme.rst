@@ -17,12 +17,21 @@ License
 **Apache License 2.0**
 
 
+Pre-requisites
+==============
+
+* docker
+* access to DIGITbrain private docker repo (username, password) to pull the image:
+  
+  - ``docker login dbs-container-repo.emgora.eu``
+  - ``docker pull dbs-container-repo.emgora.eu/apache-kafka:3.0.0``
+
 Usage
 =====
 
 The preferred way to run this container :
 
-``docker run -d --rm --name kafka --rm -e ADVERTISED_IP=xxx.xxx.xxx.xxx -p 9093:9093/tcp kafka-image:3.0.0``
+``docker run -d --rm --name kafka --rm -e ADVERTISED_IP=xxx.xxx.xxx.xxx -p 9093:9093/tcp apache-kafka:3.0.0``
 
 where ADVERTISED_IP is the IP address/domain name of the host where Kafka is accessible from clients (consumers/producers),
 and port 9093 is the SSL port opened by Kafka. ADVERTISED_IP is typically a public IP of the host, where port 9093 is opened in the firewall.
@@ -38,7 +47,7 @@ In a customized setup one can define other parameters:
 	-v my-data://home/kafka/data \
 	-v my-certificates:/home/kafka/certificates/ \
 	-e PLAINTEXT_PORT=19092 -p 19093:19093/tcp -e SSL_PORT=19093 -p 19092:19092/tcp \
-	kafka-image:3.0.0
+	apache-kafka:3.0.0
 
 See parameters and volumes below for explanation.
 
