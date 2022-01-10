@@ -20,7 +20,7 @@ License
 Pre-requisites
 ==============
 
-* docker
+* *docker* installed
 * access to DIGITbrain private docker repo (username, password) to pull the image:
   
   - ``docker login dbs-container-repo.emgora.eu``
@@ -38,7 +38,7 @@ and port 9093 is the SSL port opened by Kafka. ADVERTISED_IP is typically a publ
 The image uses a server certificate signed by DIGITbrain certificate authority by default that
 can be replaced with other server certificate (see options below).
 
-In a customized setup one can define other parameters:
+In a customized setup one can define further parameters:
 
 .. code-block:: bash
 
@@ -48,6 +48,9 @@ In a customized setup one can define other parameters:
 	-v my-certificates:/home/kafka/certificates/ \
 	-e PLAINTEXT_PORT=19092 -p 19093:19093/tcp -e SSL_PORT=19093 -p 19092:19092/tcp \
 	apache-kafka:3.0.0
+
+.. warning::
+    Opening PLAINTEXT port to the public internet is not recommended.
 
 See parameters and volumes below for explanation.
 
