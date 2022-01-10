@@ -5,12 +5,12 @@ Apache Kafka component
 About
 =====
 
-Apache Kafka is an open-source distributed event streaming platform. This container starts up a single-node Apache Kafka message broker - along with an
+**Apache Kafka** [1]_ is an open-source distributed event streaming platform. This container starts up a single-node Apache Kafka message broker - along with an
 Apache Zookeeper component inside.
 
 Version
 -------
-**Apache Kafka version 3.0.0** is deployed from Kafka binaries downloaded from [1] on **Ubuntu 20.04 LTS** official base image (Focal Fossa) downloaded from docker hub [2].
+**Apache Kafka** binaries **version 3.0.0** [2]_ deployed on top of **Ubuntu 20.04 LTS** official base image ('Focal Fossa') available in Docker Hub [3]_.
 
 License
 -------
@@ -97,6 +97,8 @@ The container might use the following volume mounts.
 References
 ==========
 
-[1] https://dlcdn.apache.org/kafka/3.0.0/
+[1] https://kafka.apache.org/
 
-[2] https://hub.docker.com/_/ubuntu
+[2] https://dlcdn.apache.org/kafka/3.0.0/
+
+[3] https://hub.docker.com/_/ubuntu
