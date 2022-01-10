@@ -97,8 +97,8 @@ The container might use the following volume mounts.
 References
 ==========
 
-[1] https://kafka.apache.org/
+.. [1] https://kafka.apache.org/
 
-[2] https://dlcdn.apache.org/kafka/3.0.0/
+.. [2] https://dlcdn.apache.org/kafka/3.0.0/
 
-[3] https://hub.docker.com/_/ubuntu
+.. [3] https://hub.docker.com/_/ubuntu
