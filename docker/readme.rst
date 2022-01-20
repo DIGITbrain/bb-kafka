@@ -46,20 +46,37 @@ In a customized setup one can define further parameters:
 	-e ADVERTISED_IP=193.xxx.xxx.xxx \ 
 	-v my-data://home/kafka/data \
 	-v my-certificates:/home/kafka/certificates/ \
-	-e PLAINTEXT_PORT=19092 -p 19093:19093/tcp -e SSL_PORT=19093 -p 19092:19092/tcp \
+	-p 19093:9093/tcp -e SSL_PORT=19093 \
 	apache-kafka:3.0.0
 
-.. warning::
-    Opening PLAINTEXT port to the public internet is not recommended.
 
 See parameters and volumes below for explanation.
+
+
+Security
+========
+The image uses **SSL/TLS mutual authentication**.
+It contains a server certificate signed by DIGITbrain certificate authority, but obviously host name verification will fail (use ssl.endpoint.identification.algorithm= to disable it if needed). 
+You should use the server certificate of your own (see Volumes below how to override it).
+
+In Kafka clients you may use client-ssl.properties file like below:
+
+.. code-block:: bash
+
+  security.protocol=SSL
+  ssl.endpoint.identification.algorithm=
+  ssl.keystore.location=./config/kafka-client.keystore.jks
+  ssl.keystore.password=keystorepass
+  ssl.truststore.location=./config/kafka-client.truststore.jks
+  ssl.truststore.password=truststorepass
+
+Configuration
+-------------
 
 Parameters
 ----------
 
-The container has the following parameters, passed as environment variables.
-
-.. list-table:: Parameters
+.. list-table:: 
    :header-rows: 1
 
    * - Name
@@ -70,18 +87,26 @@ The container has the following parameters, passed as environment variables.
      - IP address/domain name of the host
    * - ``SSL_PORT``
      - 9093
-     - Port for encrypted traffic that uses TLS/SSL client authentication. See volumes for certificates.
-   * - ``PLAINTEXT_PORT``
-     - 9092
-     - Non-encrypted, unauthentucated port to access Kafka. Unsecure.
+     - SSL_PORT is advertised to clients
 
+Ports
+-----
+.. list-table:: 
+  :header-rows: 1
+
+  * - Container port
+    - Host port bind example
+    - Comment
+  * - SSL
+    - ``-p 19093:9093``
+    - Default Kafka SSL port 9093 is opened as port 13306 on the host. Note that this port is "advertised" (SSL_PORT) for clients. 
 
 Volumes
 -------
 
 The container might use the following volume mounts.
 
-.. list-table:: Volumes
+.. list-table:: 
    :header-rows: 1
 
    * - Name
