@@ -1,5 +1,5 @@
-# build image: docker build -t apache-kafka:3.0.0 .
-# docker run -d --rm --name kafka --rm -e ADVERTISED_IP=xxx.xxx.xxx.xxx -p 9093:9093/tcp kafka-image:3.0.0
+# docker build -t kafka:3.0.0 .
+# docker run -d --rm --name kafka -e ADVERTISED_IP=localhost -p 9093:9093/tcp kafka:3.0.0
 
 FROM ubuntu:20.04
 
@@ -9,6 +9,11 @@ RUN apt-get update && apt-get install -y openjdk-11-jdk-headless wget
 # create user 'kafka'
 RUN useradd -ms /bin/bash kafka
 RUN passwd kafka -l
+
+COPY ./start-kafka.sh /home/kafka/
+RUN chown kafka:kafka /home/kafka/start-kafka.sh
+RUN chmod +x /home/kafka/start-kafka.sh
+
 USER kafka
 WORKDIR /home/kafka
 
@@ -37,7 +42,6 @@ RUN sed -i 's/\/tmp\/kafka-logs/\/home\/kafka\/data/g' config/server.properties;
     echo "\n### new part ###" >> config/server.properties; \
     echo "delete.topic.enable = true" >> config/server.properties; \
     echo "log.retention.bytes=10737418240" >> config/server.properties; \
-#   echo "listeners=PLAINTEXT://:9092,SSL://:9093" >> config/server.properties; \
     echo "listeners=EXTERNAL://:9093,INTERNAL://:9092" >> config/server.properties; \
     echo "listener.security.protocol.map=EXTERNAL:SSL,INTERNAL:PLAINTEXT" >> config/server.properties; \
     echo "inter.broker.listener.name=INTERNAL" >> config/server.properties; \
@@ -49,25 +53,10 @@ RUN sed -i 's/\/tmp\/kafka-logs/\/home\/kafka\/data/g' config/server.properties;
     echo "ssl.truststore.password=truststorepass" >> config/server.properties; \
     echo "ssl.truststore.type=PKCS12" >> config/server.properties;
 
-#   echo "advertised.listeners=PLAINTEXT://ADVERTISED_IP:PLAINTEXT_PORT,SSL://ADVERTISED_IP:SSL_PORT" >> config/server.properties; \
-
-# create start-kafka.sh wrapper that starts zookeeper and kafka (and injects environment parameters: ADVERTISED_IP, PLAINTEXT_PORT, SSL_PORT)
-RUN echo "#!/bin/bash" >> start-kafka.sh; \
-    echo "if [[ -z \"\${ADVERTISED_IP}\" ]]; then ADVERTISED_IP=\"127.0.0.1\"; fi" >> start-kafka.sh; \
-    echo "if [[ -z \"\${SSL_PORT}\" ]]; then SSL_PORT=\"9093\"; fi" >> start-kafka.sh; \
-    echo "echo \"advertised.listeners=EXTERNAL://\$ADVERTISED_IP:\$SSL_PORT,INTERNAL://:9092\" >> config/server.properties" >> start-kafka.sh; \
-    echo "/home/kafka/bin/zookeeper-server-start.sh /home/kafka/config/zookeeper.properties &" >> start-kafka.sh; \
-#   echo "sed -i 's/ADVERTISED_IP/'\$ADVERTISED_IP'/g' config/server.properties" >> start-kafka.sh; \
-#   echo "sed -i 's/PLAINTEXT_PORT/'\$PLAINTEXT_PORT'/g' config/server.properties" >> start-kafka.sh; \
-#   echo "sed -i 's/SSL_PORT/'\$SSL_PORT'/g' config/server.properties" >> start-kafka.sh; \
-    echo "/home/kafka/bin/kafka-server-start.sh /home/kafka/config/server.properties &" >> start-kafka.sh; \
-    echo "wait -n" >> start-kafka.sh; \
-    echo "exit $?" >> start-kafka.sh;
-RUN chmod +x start-kafka.sh
-
 # update Kafka and Zookeeper loggers to limit disk space
 # turn off TRACE for Kafka controller logs
 RUN sed -i 's/log4j.logger.kafka.controller=TRACE/log4j.logger.kafka.controller=INFO/g' config/log4j.properties
+
 # replace Kafka's DailyRollingFileAppender with RollingFileAppender, set maxBackupIndex to 10 (default maxFileSize 10MB)
 RUN sed -i 's/org.apache.log4j.DailyRollingFileAppender/org.apache.log4j.RollingFileAppender/g' config/log4j.properties
 RUN echo "\n### new part ###" >> config/log4j.properties; \
@@ -80,4 +69,3 @@ RUN echo "\n### new part ###" >> config/log4j.properties; \
 
 # run zookeeper and kafka at startup (ENTRYPOINT?)
 CMD /home/kafka/start-kafka.sh
-
