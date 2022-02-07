@@ -88,6 +88,12 @@ Parameters
    * - ``SSL_PORT``
      - 9093
      - SSL_PORT is advertised to clients
+   * - ``ZOOKEEPER_HOST``
+     - localhost
+     - Hostname/IP of the external Zookeeper
+   * - ``ZOOKEEPER_PORT``
+     - 2181
+     - Port of the external Zookeeper
 
 Ports
 -----
